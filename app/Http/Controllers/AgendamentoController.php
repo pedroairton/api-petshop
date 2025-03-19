@@ -4,12 +4,15 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Models\Agendamento;
+use App\Models\Pet;
 use Illuminate\Http\Request;
 
 class AgendamentoController extends Controller
 {
     public function index(){
-        return view('pages.agendamento');
+        $agendamentos = Agendamento::with(['pet:id,nome', 'servico:id,nome_servico'])->get();
+        return response()->json($agendamentos);
+        // return view('pages.agendamento', compact('agendamento'));
     }
     public function agendar(Request $request){
         $request->validate([
@@ -25,5 +28,9 @@ class AgendamentoController extends Controller
             'descricao' => $request->descricao,
             'status' => 'Pendente'
         ]);
+    }
+    public function petAgenda(Pet $pet){
+        $petAgenda = Agendamento::where('id_pet', $pet->id)->get();
+        return response()->json($petAgenda);
     }
 }

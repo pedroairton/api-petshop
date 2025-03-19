@@ -12,6 +12,10 @@ class Pet extends Model
     ];
 
     public function dono(){
-        $this->belongsTo(Usuario::class, 'id_dono');
+        return $this->belongsTo(Usuario::class, 'id_dono');
+    }
+
+    public function agendamentos(){
+        return $this->hasMany(Agendamento::class, 'id_pet');
     }
 }

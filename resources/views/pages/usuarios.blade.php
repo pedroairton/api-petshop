@@ -31,7 +31,7 @@
                         <td>
                             {{ $usuario->id }} 
                             <a href="{{ route('pages.usuario', $usuario->id) }}">
-                                cu
+                                abrir
                             </a>
                         </td>
                     </tr>

@@ -17,4 +17,12 @@ class Agendamento extends Model
         'descricao',
         'status'
     ];
+
+    public function pet(){
+        return $this->belongsTo(Pet::class, 'id_pet');
+    }
+
+    public function servico(){
+        return $this->belongsTo(Servico::class, 'id_servico');
+    }
 }

@@ -88,3 +88,4 @@ Route::post('/usuarios/{id}', [PetController::class, 'registerPet'])->name('pet'
 
 Route::get('/agendamento', [AgendamentoController::class, 'index'])->name('pages.agendamento');
 Route::post('/agendamento', [AgendamentoController::class, 'agendar'])->name('agendamento');
+Route::get('/agendamento/{pet}', [AgendamentoController::class, 'petAgenda'])->name('pet-agenda');

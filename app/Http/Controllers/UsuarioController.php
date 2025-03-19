@@ -13,8 +13,8 @@ class UsuarioController extends Controller
     //
     public function index(){
         $usuarios = Usuario::all();
-        return response()->json($usuarios, 200);
-        // return view('pages.usuarios', compact('usuarios'));
+        response()->json($usuarios, 200);
+        return view('pages.usuarios', compact('usuarios'));
     }
     public function registerUsuario(Request $request){
         $input = $request->validate([
@@ -43,7 +43,8 @@ class UsuarioController extends Controller
     public function usuario(Usuario $usuario){
         $pets = $usuario->pets;
         $servicos = Servico::all();
-        // return view('pages.usuario', compact('usuario', 'pets', 'servicos'));
-        return response()->json([$pets, $servicos], 200);
+        // dd($agendaPet);
+        return view('pages.usuario', compact('usuario', 'pets', 'servicos'));
+        // response()->json([$pets, $servicos], 200);
     }
 }
