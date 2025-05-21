@@ -13,8 +13,8 @@ class UsuarioController extends Controller
     //
     public function index(){
         $usuarios = Usuario::all();
-        response()->json($usuarios, 200);
-        return view('pages.usuarios', compact('usuarios'));
+        return response()->json($usuarios, 200);
+        // return view('pages.usuarios', compact('usuarios'));
     }
     public function registerUsuario(Request $request){
         $input = $request->validate([

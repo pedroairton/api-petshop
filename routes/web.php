@@ -68,9 +68,12 @@ Route::post('/cadastro', [UserController::class, 'store'])->name('pages.store');
 Route::get('/register', [AuthController::class, 'showRegister'])->name('pages.register');
 Route::post('/register', [AuthController::class, 'register'])->name('register');
 
+// exibe view de login
 Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
+// fazer login
 Route::post('/login', [AuthController::class, 'login']);
 
+// fazer logout
 Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
 
 Route::get('/dashboard', function(){
@@ -81,11 +84,20 @@ Route::get('/dashboard', function(){
     // retornar view do dashboard aqui
 })->name('dashboard');
 
+// exibe usuarios
 Route::get('/usuarios', [UsuarioController::class, 'index'])->name('pages.usuarios');
+// exibe usuario por id
 Route::get('/usuarios/{usuario}', [UsuarioController::class, 'usuario'])->name('pages.usuario');
+// cadastrar usuario
 Route::post('/usuarios', [UsuarioController::class, 'registerUsuario'])->name('usuarios');
+// cadastrar pet
 Route::post('/usuarios/{id}', [PetController::class, 'registerPet'])->name('pet');
 
+// exibe agenda
 Route::get('/agendamento', [AgendamentoController::class, 'index'])->name('pages.agendamento');
+Route::get('/agendamento/prev', [AgendamentoController::class, 'prevAgendamentos'])->name('pages.agendamento.prev');
+Route::get('/agendamento/next', [AgendamentoController::class, 'nextAgendamentos'])->name('pages.agendamento.next');
+// agendar
 Route::post('/agendamento', [AgendamentoController::class, 'agendar'])->name('agendamento');
+// exibe agenda de um pet
 Route::get('/agendamento/{pet}', [AgendamentoController::class, 'petAgenda'])->name('pet-agenda');
