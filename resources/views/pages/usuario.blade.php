@@ -47,6 +47,8 @@
                 @endforeach
             </tbody>
         </table>
+        <h1>token {{ csrf_token() }}
+        </h1>
         <form class="form-agendamento">
             @csrf
             <select name="id_servico">
@@ -112,7 +114,7 @@
             const formData = new FormData(this);
 
             // Enviando os dados via Fetch API
-            fetch('{{ route("agendamento") }}', {
+            fetch('{{ route('agendamento') }}', {
                     method: 'POST',
                     headers: {
                         'Accept': 'application/json',

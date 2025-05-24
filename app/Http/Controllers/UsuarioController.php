@@ -37,6 +37,7 @@ class UsuarioController extends Controller
             'telefone' => $request->telefone,
             // 'senha' => Hash::make($request->senha),
             'senha' => ''
+            // Senha será retirada no futuro
         ]);
         return response()->json(['message' => 'Enviado com sucesso'], 201);
     }
@@ -44,7 +45,12 @@ class UsuarioController extends Controller
         $pets = $usuario->pets;
         $servicos = Servico::all();
         // dd($agendaPet);
-        return view('pages.usuario', compact('usuario', 'pets', 'servicos'));
-        // response()->json([$pets, $servicos], 200);
+        return response()->json(['usuario' => $usuario, 'pets' => $pets], 200);
+        // return view('pages.usuario', compact('usuario', 'pets', 'servicos'));
+    }
+    public function buscaUser(Request $request){
+        $query = $request->input('nome');
+        $usuarios = Usuario::where('nome', 'like', "%$query%")->get();
+        return response()->json($usuarios, 200);
     }
 }

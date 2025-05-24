@@ -84,15 +84,6 @@ Route::get('/dashboard', function(){
     // retornar view do dashboard aqui
 })->name('dashboard');
 
-// exibe usuarios
-Route::get('/usuarios', [UsuarioController::class, 'index'])->name('pages.usuarios');
-// exibe usuario por id
-Route::get('/usuarios/{usuario}', [UsuarioController::class, 'usuario'])->name('pages.usuario');
-// cadastrar usuario
-Route::post('/usuarios', [UsuarioController::class, 'registerUsuario'])->name('usuarios');
-// cadastrar pet
-Route::post('/usuarios/{id}', [PetController::class, 'registerPet'])->name('pet');
-
 // exibe agenda
 Route::get('/agendamento', [AgendamentoController::class, 'index'])->name('pages.agendamento');
 Route::get('/agendamento/prev', [AgendamentoController::class, 'prevAgendamentos'])->name('pages.agendamento.prev');

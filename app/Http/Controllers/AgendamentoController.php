@@ -39,7 +39,8 @@ class AgendamentoController extends Controller
         $dataHoje = $now->toDateString();
         $horaAgora = $now->toTimeString();
 
-        $agendamentos = Agendamento::with(['pet:id,nome', 'servico:id,nome_servico'])->get();
+        // $agendamentos = Agendamento::with(['pet:id,nome', 'servico:id,nome_servico'])->get();
+        
         $nextAgendamentos = Agendamento::with(['pet:id,nome', 'servico:id,nome_servico'])->where(function ($query) use ($dataHoje, $horaAgora) {
             $query->where('data_agendamento', '>', $dataHoje)
                 ->orWhere(function ($query) use ($dataHoje, $horaAgora) {
