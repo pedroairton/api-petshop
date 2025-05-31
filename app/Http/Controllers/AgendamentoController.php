@@ -17,21 +17,21 @@ class AgendamentoController extends Controller
         $horaAgora = $now->toTimeString();
 
         $agendamentos = Agendamento::with(['pet:id,nome', 'servico:id,nome_servico'])->get();
-        $nextAgendamentos = Agendamento::with(['pet:id,nome', 'servico:id,nome_servico'])->where(function ($query) use ($dataHoje, $horaAgora) {
+        $nextAgendamentos = Agendamento::with(['pet:id,nome,id_dono', 'pet.dono:id,nome' ,'servico:id,nome_servico'])->where(function ($query) use ($dataHoje, $horaAgora) {
             $query->where('data_agendamento', '>', $dataHoje)
                 ->orWhere(function ($query) use ($dataHoje, $horaAgora) {
                     $query->where('data_agendamento', $dataHoje)
                         ->where('hora_agendamento', '>=', $horaAgora);
                 });
         })->get();
-        $prevAgendamentos = Agendamento::with(['pet:id,nome', 'servico:id,nome_servico'])->where(function ($query) use ($dataHoje, $horaAgora) {
+        $prevAgendamentos = Agendamento::with(['pet:id,nome,id_dono', 'pet.dono:id,nome' ,'servico:id,nome_servico'])->where(function ($query) use ($dataHoje, $horaAgora) {
             $query->where('data_agendamento', '<', $dataHoje)
                   ->orWhere(function ($query) use ($dataHoje, $horaAgora) {
                       $query->where('data_agendamento', $dataHoje)
                             ->where('hora_agendamento', '<', $horaAgora);
                   });
         })->get();
-        return response()->json([$nextAgendamentos, $prevAgendamentos], status: 200);
+        return response()->json(['nextAgendamentos' => $nextAgendamentos, 'prevAgendamentos' => $prevAgendamentos], status: 200);
         // return view('pages.agendamento', compact('agendamentos', 'nextAgendamentos', 'prevAgendamentos'));
     }
     public function nextAgendamentos(){

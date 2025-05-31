@@ -5,10 +5,12 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use App\Models\Pet;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class PetController extends Controller
 {
-    public function registerPet(Request $request, $id){
+    public function registerPet(Request $request, $id)
+    {
         $request->validate([
             'nome' => 'required',
             'genero' => 'required',
@@ -29,5 +31,10 @@ class PetController extends Controller
             'id_dono' => $id,
         ]);
         return response()->json(['message' => 'Enviado com sucesso'], 201);
+    }
+    public function quantPet()
+    {
+        $quantidade = Pet::select('tipo_animal', DB::raw('count(*) as total'))->groupBy('tipo_animal')->get();
+        return response()->json($quantidade);
     }
 }

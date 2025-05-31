@@ -53,4 +53,8 @@ class UsuarioController extends Controller
         $usuarios = Usuario::where('nome', 'like', "%$query%")->get();
         return response()->json($usuarios, 200);
     }
+    public function quantUser(){
+        $quantUser = Usuario::all()->count();
+        dd($quantUser);
+    }
 }

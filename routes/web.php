@@ -92,3 +92,5 @@ Route::get('/agendamento/next', [AgendamentoController::class, 'nextAgendamentos
 Route::post('/agendamento', [AgendamentoController::class, 'agendar'])->name('agendamento');
 // exibe agenda de um pet
 Route::get('/agendamento/{pet}', [AgendamentoController::class, 'petAgenda'])->name('pet-agenda');
+
+Route::get('/teste', function(){return view('pages.teste');});
