@@ -16,15 +16,15 @@ class AgendamentoController extends Controller
         $dataHoje = $now->toDateString();
         $horaAgora = $now->toTimeString();
 
-        $agendamentos = Agendamento::with(['pet:id,nome', 'servico:id,nome_servico'])->get();
-        $nextAgendamentos = Agendamento::with(['pet:id,nome,id_dono', 'pet.dono:id,nome' ,'servico:id,nome_servico'])->where(function ($query) use ($dataHoje, $horaAgora) {
+        // $agendamentos = Agendamento::with(['pet:id,nome,tipo_animal', 'servico:id,nome_servico'])->get();
+        $nextAgendamentos = Agendamento::with(['pet:id,nome,id_dono,tipo_animal', 'pet.dono:id,nome' ,'servico:id,nome_servico'])->where(function ($query) use ($dataHoje, $horaAgora) {
             $query->where('data_agendamento', '>', $dataHoje)
                 ->orWhere(function ($query) use ($dataHoje, $horaAgora) {
                     $query->where('data_agendamento', $dataHoje)
                         ->where('hora_agendamento', '>=', $horaAgora);
                 });
         })->get();
-        $prevAgendamentos = Agendamento::with(['pet:id,nome,id_dono', 'pet.dono:id,nome' ,'servico:id,nome_servico'])->where(function ($query) use ($dataHoje, $horaAgora) {
+        $prevAgendamentos = Agendamento::with(['pet:id,nome,id_dono,tipo_animal', 'pet.dono:id,nome' ,'servico:id,nome_servico'])->where(function ($query) use ($dataHoje, $horaAgora) {
             $query->where('data_agendamento', '<', $dataHoje)
                   ->orWhere(function ($query) use ($dataHoje, $horaAgora) {
                       $query->where('data_agendamento', $dataHoje)

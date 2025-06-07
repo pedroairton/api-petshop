@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\PetController;
+use App\Http\Controllers\ServicoController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UsuarioController;
 
@@ -18,3 +19,7 @@ Route::post('/usuarios', [UsuarioController::class, 'registerUsuario'])->name('u
 Route::post('/usuarios/{id}', [PetController::class, 'registerPet'])->name('pet');
 // num de pet
 Route::get('/count/pet', [PetController::class, 'quantPet'])->name('quantPet');
+//servicos
+Route::get('/servicos', [ServicoController::class, 'index'])->name('servicos');
+// num de servicos
+Route::get('/count/servicos', [ServicoController::class, 'quantServicos'])->name('quantServicos');

@@ -86,8 +86,6 @@ Route::get('/dashboard', function(){
 
 // exibe agenda
 Route::get('/agendamento', [AgendamentoController::class, 'index'])->name('pages.agendamento');
-Route::get('/agendamento/prev', [AgendamentoController::class, 'prevAgendamentos'])->name('pages.agendamento.prev');
-Route::get('/agendamento/next', [AgendamentoController::class, 'nextAgendamentos'])->name('pages.agendamento.next');
 // agendar
 Route::post('/agendamento', [AgendamentoController::class, 'agendar'])->name('agendamento');
 // exibe agenda de um pet
