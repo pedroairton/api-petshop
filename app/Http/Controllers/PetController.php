@@ -9,6 +9,9 @@ use Illuminate\Support\Facades\DB;
 
 class PetController extends Controller
 {
+    public function getPet(Pet $pet){
+        return response()->json($pet, 200);
+    }
     public function registerPet(Request $request, $id)
     {
         $request->validate([

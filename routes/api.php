@@ -19,6 +19,8 @@ Route::post('/usuarios', [UsuarioController::class, 'registerUsuario'])->name('u
 Route::post('/usuarios/{id}', [PetController::class, 'registerPet'])->name('pet');
 // num de pet
 Route::get('/count/pet', [PetController::class, 'quantPet'])->name('quantPet');
+// exibe pet por id
+Route::get('/pet/{pet}', [PetController::class, 'getPet'])->name('get-pet');
 //servicos
 Route::get('/servicos', [ServicoController::class, 'index'])->name('servicos');
 // num de servicos
