@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AgendamentoController;
 use App\Http\Controllers\PetController;
 use App\Http\Controllers\ServicoController;
 use Illuminate\Support\Facades\Route;
@@ -25,3 +26,9 @@ Route::get('/pet/{pet}', [PetController::class, 'getPet'])->name('get-pet');
 Route::get('/servicos', [ServicoController::class, 'index'])->name('servicos');
 // num de servicos
 Route::get('/count/servicos', [ServicoController::class, 'quantServicos'])->name('quantServicos');
+// exibe agenda
+Route::get('/agendamento', [AgendamentoController::class, 'index'])->name('pages.agendamento');
+// exibe agenda de um pet
+Route::get('/agendamento/{pet}', [AgendamentoController::class, 'petAgenda'])->name('pet-agenda');
+// agendar
+Route::post('/agendamento', [AgendamentoController::class, 'agendar'])->name('agendamento');

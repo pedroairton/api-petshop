@@ -83,12 +83,3 @@ Route::get('/dashboard', function(){
     return view('pages.dashboard');
     // retornar view do dashboard aqui
 })->name('dashboard');
-
-// exibe agenda
-Route::get('/agendamento', [AgendamentoController::class, 'index'])->name('pages.agendamento');
-// agendar
-Route::post('/agendamento', [AgendamentoController::class, 'agendar'])->name('agendamento');
-// exibe agenda de um pet
-Route::get('/agendamento/{pet}', [AgendamentoController::class, 'petAgenda'])->name('pet-agenda');
-
-Route::get('/teste', function(){return view('pages.teste');});

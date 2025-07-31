@@ -23,14 +23,14 @@ class AgendamentoController extends Controller
                     $query->where('data_agendamento', $dataHoje)
                         ->where('hora_agendamento', '>=', $horaAgora);
                 });
-        })->get();
+        })->orderBy('data_agendamento')->get();
         $prevAgendamentos = Agendamento::with(['pet:id,nome,id_dono,tipo_animal', 'pet.dono:id,nome' ,'servico:id,nome_servico'])->where(function ($query) use ($dataHoje, $horaAgora) {
             $query->where('data_agendamento', '<', $dataHoje)
                   ->orWhere(function ($query) use ($dataHoje, $horaAgora) {
                       $query->where('data_agendamento', $dataHoje)
                             ->where('hora_agendamento', '<', $horaAgora);
                   });
-        })->get();
+        })->orderBy('data_agendamento')->get();
         return response()->json(['nextAgendamentos' => $nextAgendamentos, 'prevAgendamentos' => $prevAgendamentos], status: 200);
         // return view('pages.agendamento', compact('agendamentos', 'nextAgendamentos', 'prevAgendamentos'));
     }
@@ -87,5 +87,8 @@ class AgendamentoController extends Controller
     {
         $petAgenda = Agendamento::where('id_pet', $pet->id)->get();
         return response()->json($petAgenda);
+    }
+    public function concluir(){
+        
     }
 }
