@@ -17,30 +17,31 @@ class AgendamentoController extends Controller
         $horaAgora = $now->toTimeString();
 
         // $agendamentos = Agendamento::with(['pet:id,nome,tipo_animal', 'servico:id,nome_servico'])->get();
-        $nextAgendamentos = Agendamento::with(['pet:id,nome,id_dono,tipo_animal', 'pet.dono:id,nome' ,'servico:id,nome_servico'])->where(function ($query) use ($dataHoje, $horaAgora) {
+        $nextAgendamentos = Agendamento::with(['pet:id,nome,id_dono,tipo_animal', 'pet.dono:id,nome', 'servico:id,nome_servico'])->where(function ($query) use ($dataHoje, $horaAgora) {
             $query->where('data_agendamento', '>', $dataHoje)
                 ->orWhere(function ($query) use ($dataHoje, $horaAgora) {
                     $query->where('data_agendamento', $dataHoje)
                         ->where('hora_agendamento', '>=', $horaAgora);
                 });
         })->orderBy('data_agendamento')->get();
-        $prevAgendamentos = Agendamento::with(['pet:id,nome,id_dono,tipo_animal', 'pet.dono:id,nome' ,'servico:id,nome_servico'])->where(function ($query) use ($dataHoje, $horaAgora) {
+        $prevAgendamentos = Agendamento::with(['pet:id,nome,id_dono,tipo_animal', 'pet.dono:id,nome', 'servico:id,nome_servico'])->where(function ($query) use ($dataHoje, $horaAgora) {
             $query->where('data_agendamento', '<', $dataHoje)
-                  ->orWhere(function ($query) use ($dataHoje, $horaAgora) {
-                      $query->where('data_agendamento', $dataHoje)
-                            ->where('hora_agendamento', '<', $horaAgora);
-                  });
+                ->orWhere(function ($query) use ($dataHoje, $horaAgora) {
+                    $query->where('data_agendamento', $dataHoje)
+                        ->where('hora_agendamento', '<', $horaAgora);
+                });
         })->orderBy('data_agendamento')->get();
         return response()->json(['nextAgendamentos' => $nextAgendamentos, 'prevAgendamentos' => $prevAgendamentos], status: 200);
         // return view('pages.agendamento', compact('agendamentos', 'nextAgendamentos', 'prevAgendamentos'));
     }
-    public function nextAgendamentos(){
+    public function nextAgendamentos()
+    {
         $now = Carbon::now();
         $dataHoje = $now->toDateString();
         $horaAgora = $now->toTimeString();
 
         // $agendamentos = Agendamento::with(['pet:id,nome', 'servico:id,nome_servico'])->get();
-        
+
         $nextAgendamentos = Agendamento::with(['pet:id,nome', 'servico:id,nome_servico'])->where(function ($query) use ($dataHoje, $horaAgora) {
             $query->where('data_agendamento', '>', $dataHoje)
                 ->orWhere(function ($query) use ($dataHoje, $horaAgora) {
@@ -51,17 +52,18 @@ class AgendamentoController extends Controller
         return response()->json($nextAgendamentos, status: 200);
 
     }
-    public function prevAgendamentos(){
+    public function prevAgendamentos()
+    {
         $now = Carbon::now();
         $dataHoje = $now->toDateString();
         $horaAgora = $now->toTimeString();
 
         $prevAgendamentos = Agendamento::with(['pet:id,nome', 'servico:id,nome_servico'])->where(function ($query) use ($dataHoje, $horaAgora) {
             $query->where('data_agendamento', '<', $dataHoje)
-                  ->orWhere(function ($query) use ($dataHoje, $horaAgora) {
-                      $query->where('data_agendamento', $dataHoje)
-                            ->where('hora_agendamento', '<', $horaAgora);
-                  });
+                ->orWhere(function ($query) use ($dataHoje, $horaAgora) {
+                    $query->where('data_agendamento', $dataHoje)
+                        ->where('hora_agendamento', '<', $horaAgora);
+                });
         })->get();
 
         return response()->json($prevAgendamentos, status: 200);
@@ -88,7 +90,17 @@ class AgendamentoController extends Controller
         $petAgenda = Agendamento::where('id_pet', $pet->id)->get();
         return response()->json($petAgenda);
     }
-    public function concluir(){
-        
+    public function concluir($id)
+    {
+        $agendamento = Agendamento::find($id);
+
+        if (!$agendamento) {
+            return response()->json(['erro' => 'Agendamento não encontrado'], 404);
+        }
+
+        $agendamento->status = "Concluído";
+        $agendamento->save();
+
+        return response()->json(['mensagem' => 'Agendamento concluído com sucesso'], 200);
     }
 }

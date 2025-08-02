@@ -32,3 +32,5 @@ Route::get('/agendamento', [AgendamentoController::class, 'index'])->name('pages
 Route::get('/agendamento/{pet}', [AgendamentoController::class, 'petAgenda'])->name('pet-agenda');
 // agendar
 Route::post('/agendamento', [AgendamentoController::class, 'agendar'])->name('agendamento');
+// concluir agendamento
+Route::put('/agendamento/{id}/concluir', [AgendamentoController::class, 'concluir'])->name('conclui-agendamento');
