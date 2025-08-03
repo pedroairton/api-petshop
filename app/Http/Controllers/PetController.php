@@ -37,7 +37,7 @@ class PetController extends Controller
     }
     public function quantPet()
     {
-        $quantidade = Pet::select('tipo_animal', DB::raw('count(*) as total'))->groupBy('tipo_animal')->get();
+        $quantidade = Pet::select('tipo_animal', DB::raw('count(*) as total'))->groupBy('tipo_animal')->orderByDesc('total')->get();
         return response()->json($quantidade, 200);
     }
 }
