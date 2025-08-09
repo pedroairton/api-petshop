@@ -36,3 +36,5 @@ Route::post('/agendamento', [AgendamentoController::class, 'agendar'])->name('ag
 Route::put('/agendamento/{id}/concluir', [AgendamentoController::class, 'concluir'])->name('conclui-agendamento');
 // atualiza pet
 Route::put('/pet/atualizar/{id}', [PetController::class, 'updatePet'])->name('atualiza-pet');
+// atualizar usuario
+Route::put('/usuarios/atualizar/{id}', [UsuarioController::class, 'updateUser'])->name('atualizar.user');

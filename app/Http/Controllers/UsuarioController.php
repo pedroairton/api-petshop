@@ -57,4 +57,14 @@ class UsuarioController extends Controller
         $quantUser = Usuario::all()->count();
         dd($quantUser);
     }
+    public function updateUser(Request $request, $id){
+        $usuario = Usuario::find($id);
+        $usuario->update($request->all());
+        return response()->json('Usuário atualizado');
+    }
+    public function delUser(Request $request, $id) {
+        $usuario = Usuario::find($id);
+        $usuario->update($request->all());
+        return response()->json('Usuário deletado');
+    }
 }

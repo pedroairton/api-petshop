@@ -40,7 +40,14 @@ class PetController extends Controller
         $quantidade = Pet::select('tipo_animal', DB::raw('count(*) as total'))->groupBy('tipo_animal')->orderByDesc('total')->get();
         return response()->json($quantidade, 200);
     }
-    public function updatePet(Request $request){
-        dd($request);
+    public function updatePet(Request $request, $id){
+        $pet = Pet::find($id);
+        $pet->update($request->all());
+        return response()->json('Pet atualizado');
+    }
+    public function delPet(Request $request, $id) {
+        $pet = Pet::find($id);
+        $pet->delete();
+        return response()->json('Pet deletado');
     }
 }
