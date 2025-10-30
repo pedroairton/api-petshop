@@ -7,6 +7,7 @@ use App\Models\Agendamento;
 use App\Models\Pet;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class AgendamentoController extends Controller
 {
@@ -95,12 +96,32 @@ class AgendamentoController extends Controller
         $agendamento = Agendamento::find($id);
 
         if (!$agendamento) {
-            return response()->json(['erro' => 'Agendamento não encontrado'], 404);
+            return response()->json(['message' => 'Agendamento não encontrado'], 404);
         }
 
         $agendamento->status = "Concluído";
         $agendamento->save();
 
-        return response()->json(['mensagem' => 'Agendamento concluído com sucesso'], 200);
+        return response()->json(['message' => 'Agendamento concluído com sucesso'], 200);
+    }
+    public function updateAgendamento(Request $request, $id){
+        $validator = Validator::make($request->all(), [
+            'id_servico' => 'required',
+            'data_agendamento' => 'required',
+            'hora_agendamento' => 'required',
+        ], [
+            'id_servico.required' => 'Serviço não informado',
+        ]);
+
+        $agendamento = Agendamento::find($id);
+        if ($validator->fails()) {
+            return response()->json([
+                'message' => 'Dados inválidos',
+                'errors' => $validator->errors()
+            ], 422);
+        }
+
+        $agendamento->update($request->all());
+        return response()->json('Agendamento atualizado com sucesso', 200);
     }
 }
