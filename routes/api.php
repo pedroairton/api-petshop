@@ -1,10 +1,14 @@
 <?php
 
 use App\Http\Controllers\AgendamentoController;
+use App\Http\Controllers\AuthController;
 use App\Http\Controllers\PetController;
 use App\Http\Controllers\ServicoController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UsuarioController;
+
+// auth
+Route::post('/register', [AuthController::class, 'register'])->name('register');
 
 // exibe usuarios
 Route::get('/usuarios', [UsuarioController::class, 'index'])->name('pages.usuarios');

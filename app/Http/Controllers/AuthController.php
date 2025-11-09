@@ -24,7 +24,8 @@ class AuthController extends Controller
             'status' => 'Ativo'
         ]);
 
-        return redirect()->route('login')->with('success', 'Cadastro realizado com sucesso!');
+        return response()->json('Admin criado com sucesso');
+        // return redirect()->route('login')->with('success', 'Cadastro realizado com sucesso!');
     }
 
     public function showLogin(){

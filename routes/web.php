@@ -65,9 +65,6 @@ Route::get('/users/{user}', [UserController::class, 'show']);
 Route::get('/cadastro', [UserController::class, 'cadastro'])->name('pages.cadastro');
 Route::post('/cadastro', [UserController::class, 'store'])->name('pages.store');
 
-Route::get('/register', [AuthController::class, 'showRegister'])->name('pages.register');
-Route::post('/register', [AuthController::class, 'register'])->name('register');
-
 // exibe view de login
 Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
 // fazer login
