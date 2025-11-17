@@ -35,6 +35,39 @@ class AgendamentoController extends Controller
         return response()->json(['nextAgendamentos' => $nextAgendamentos, 'prevAgendamentos' => $prevAgendamentos], status: 200);
         // return view('pages.agendamento', compact('agendamentos', 'nextAgendamentos', 'prevAgendamentos'));
     }
+    public function agendaDashboard()
+    {
+        $now = Carbon::now();
+        $dataHoje = $now->toDateString();
+        $horaAgora = $now->toTimeString();
+
+        // $agendamentos = Agendamento::with(['pet:id,nome,tipo_animal', 'servico:id,nome_servico'])->get();
+        $nextAgendamentos = Agendamento::with(['pet:id,nome,id_dono,tipo_animal', 'pet.dono:id,nome', 'servico:id,nome_servico'])
+            ->where(function ($query) use ($dataHoje, $horaAgora) {
+                $query->where('data_agendamento', '>', $dataHoje)
+                    ->orWhere(function ($query) use ($dataHoje, $horaAgora) {
+                        $query->where('data_agendamento', $dataHoje)
+                            ->where('hora_agendamento', '>=', $horaAgora);
+                    });
+            })
+            ->orderBy('data_agendamento')
+            ->orderBy('hora_agendamento')
+            ->take(2)
+            ->get();
+        $prevAgendamentos = Agendamento::with(['pet:id,nome,id_dono,tipo_animal', 'pet.dono:id,nome', 'servico:id,nome_servico'])
+            ->where(function ($query) use ($dataHoje, $horaAgora) {
+                $query->where('data_agendamento', '<', $dataHoje)
+                    ->orWhere(function ($query) use ($dataHoje, $horaAgora) {
+                        $query->where('data_agendamento', $dataHoje)
+                            ->where('hora_agendamento', '<', $horaAgora);
+                    });
+            })
+            ->orderBy('data_agendamento', 'desc')
+            ->orderBy('hora_agendamento', 'desc')
+            ->take(2)
+            ->get();
+        return response()->json(['nextAgendamentos' => $nextAgendamentos, 'prevAgendamentos' => $prevAgendamentos], status: 200);
+    }
     public function nextAgendamentos()
     {
         $now = Carbon::now();
@@ -104,7 +137,8 @@ class AgendamentoController extends Controller
 
         return response()->json(['message' => 'Agendamento concluído com sucesso'], 200);
     }
-    public function updateAgendamento(Request $request, $id){
+    public function updateAgendamento(Request $request, $id)
+    {
         $validator = Validator::make($request->all(), [
             'id_servico' => 'required',
             'data_agendamento' => 'required',

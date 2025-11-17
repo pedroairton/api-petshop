@@ -55,7 +55,7 @@ class UsuarioController extends Controller
     }
     public function quantUser(){
         $quantUser = Usuario::all()->count();
-        dd($quantUser);
+        return response()->json(['total' => $quantUser], 200);
     }
     public function updateUser(Request $request, $id){
         $usuario = Usuario::find($id);

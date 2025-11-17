@@ -42,6 +42,8 @@ Route::delete('/servico/{id}/delete', [ServicoController::class, 'deleteServico'
 Route::put('/servico/atualizar/{id}', [ServicoController::class, 'updateServico'])->name('update-servico');
 // exibe agenda
 Route::get('/agendamento', [AgendamentoController::class, 'index'])->name('agendamentos');
+// exibe 2 agendamentos
+Route::get('/agendamento/mini', [AgendamentoController::class, 'agendaDashboard'])->name('agendamentos');
 // exibe agenda de um pet
 Route::get('/agendamento/{pet}', [AgendamentoController::class, 'petAgenda'])->name('pet-agenda');
 // agendar
