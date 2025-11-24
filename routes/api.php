@@ -7,9 +7,18 @@ use App\Http\Controllers\ServicoController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UsuarioController;
 
-// auth
+// AUTH
+// fazer login
+Route::post('/login', [AuthController::class, 'login'])->name('login');
+// registro
 Route::post('/register', [AuthController::class, 'register'])->name('register');
+// fazer logout
+Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
+// check de autenticacao
+Route::get('/auth/check', [AuthController::class, 'checkAuth']);
 
+Route::middleware(['admin.auth'])->group(function(){
+});
 // exibe usuarios
 Route::get('/usuarios', [UsuarioController::class, 'index'])->name('pages.usuarios');
 // exibe usuario por id

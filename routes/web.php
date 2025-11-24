@@ -9,53 +9,6 @@ use Illuminate\Support\Facades\Route;
 use App\Models\Usuario;
 
 Route::get('/', function () {
-
-    // CREATE
-    // $post = new Usuario();
-    // $post->title = 'Primeiro post';
-    // $post->body = 'Lorem texto ipsum';
-    // $post->save();
-
-    // $usuario = Usuario::create([
-    //     'nome' => 'Cleber',
-    //     'endereco' => 'Rua do mal',
-    //     'email' => 'cleber@email.com',
-    //     'telefone' => '81994791158',
-    //     'senha' => '123',
-    // ]);
-
-    // READ (GET)
-    // $post = Post::find(2);
-    // $post = Post::where('title', 'Segundo post')->first();
-    // $post = Post::all();
-
-    // UPDATE
-    // $post = Post::find(1);
-    // $post->title = 'Novo título';
-    // $post->save();
-        // simulação 
-    // $input = [
-    //     'title' => 'Titulo input',
-    //     'body' => 'Texto input'
-    // ];
-    // $post = Post::find(1);
-    // $post->fill($input);
-    // $post->save();
-
-    // DELETE
-
-    // $post = Post::find(3);
-    // $post -> delete();
-
-    // dd($post);
-
-    // $user = User::find(1);
-    // $user->profile()->create([
-    //     'type' => 'pj',
-    //     'document_number' => '234802',
-    // ]);
-    // dd($user);
-
     return view('pages.index');
 })->name('pages.index');
 
@@ -66,12 +19,8 @@ Route::get('/cadastro', [UserController::class, 'cadastro'])->name('pages.cadast
 Route::post('/cadastro', [UserController::class, 'store'])->name('pages.store');
 
 // exibe view de login
-Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
-// fazer login
-Route::post('/login', [AuthController::class, 'login']);
+Route::get('/login', [AuthController::class, 'showLogin'])->name('auth.login');
 
-// fazer logout
-Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
 
 Route::get('/dashboard', function(){
     if(!session('admin')) {
