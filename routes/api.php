@@ -8,14 +8,16 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UsuarioController;
 
 // AUTH
-// fazer login
-Route::post('/login', [AuthController::class, 'login'])->name('login');
-// registro
-Route::post('/register', [AuthController::class, 'register'])->name('register');
-// fazer logout
-Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
-// check de autenticacao
-Route::get('/auth/check', [AuthController::class, 'checkAuth']);
+Route::middleware(['api', \Illuminate\Session\Middleware\StartSession::class])->group(function (){
+    // fazer login
+    Route::post('/login', [AuthController::class, 'login'])->name('login');
+    // check de autenticacao
+    Route::get('/auth/check', [AuthController::class, 'checkAuth']);
+    // registro
+    Route::post('/register', [AuthController::class, 'register'])->name('register');
+    // fazer logout
+    Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
+});
 
 Route::middleware(['admin.auth'])->group(function(){
 });

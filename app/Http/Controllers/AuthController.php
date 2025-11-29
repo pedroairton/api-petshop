@@ -75,6 +75,7 @@ class AuthController extends Controller
             Session::put('admin', $admin->id);
             Session::put('admin_usuario', $admin->usuario);
             // return redirect()->route('dashboard')->with('success', 'Login realizado com sucesso');
+            // dd(Session::all());
             return response()->json(['message' => 'Login Realizado', 'admin' => $admin->usuario], 200);
         }
         ;
@@ -105,7 +106,8 @@ class AuthController extends Controller
             ], 200);
         }
         return response()->json([
-            'authenticated' => false
+            'authenticated' => false,
+            'session' => Session::all()
         ], 401);
     }
 }
