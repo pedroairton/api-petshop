@@ -9,56 +9,40 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Validator;
 
+
 class AuthController extends Controller
 {
-    // public function showRegister(){
-    //     return view('auth.register');
-    // }
     public function register(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'usuario' => 'required|string|unique:admins',
-            'senha' => 'required|min:6|confirmed',
+            'usuario' => 'nullable|string|max:100',
+            'senha' => 'required|min:6|confirmed'
         ], [
-            'usuario.unique' => 'Este usuário já está em uso',
+            'usuario.unique' => 'Este usuário já está sendo usado',
             'senha.confirmed' => 'A confirmação da senha não corresponde'
         ]);
 
-        if ($validator->fails()) {
-            return response()->json([
-                'errors' => $validator->errors()
-            ], 422);
-        }
-        try {
-            $admin = Admin::create([
-                'usuario' => $request->usuario,
-                'senha' => Hash::make($request->senha),
-                'status' => 'Ativo'
-            ]);
-
-            return response()->json(['message' => 'Admin criado com sucesso'], 201);
-        } catch (\Exception $e) {
-            return response()->json([
-                'message' => 'Erro ao criar admin',
-                'error' => $e->getMessage()
-            ], 500);
+        if($validator->fails()){
+            return response()->json(['message' => 'Dados inválidos', 'errors' => $validator->errors()], 422);
         }
 
+        $admin = Admin::create([
+            'usuario' => $request->nome,
+            'senha' => Hash::make($request->senha)
+        ]);
+        $expiresAt = now()->addHours(6);
+        $token = $admin->createToken('access_token', ['*'], $expiresAt)->plainTextToken;
 
-
-        // return redirect()->route('login')->with('success', 'Cadastro realizado com sucesso!');
+        return response()->json(['message' => 'Administrador registrado', 'token' => $token, 'admin' => $admin->usuario], 201);
     }
-
-    public function showLogin()
-    {
-        return view('auth.login');
-    }
-
     public function login(Request $request)
     {
         $validator = Validator::make($request->all(), [
             'usuario' => 'required|string',
             'senha' => 'required|string'
+        ], [
+            'usuario.required' => 'O campo usuário é obrigatório',
+            'senha.required' => 'A senha não pode estar vazia',
         ]);
 
         if ($validator->fails()) {
@@ -72,42 +56,69 @@ class AuthController extends Controller
             ->first();
 
         if ($admin && Hash::check($request->senha, $admin->senha)) {
-            Session::put('admin', $admin->id);
-            Session::put('admin_usuario', $admin->usuario);
-            // return redirect()->route('dashboard')->with('success', 'Login realizado com sucesso');
-            // dd(Session::all());
-            return response()->json(['message' => 'Login Realizado', 'admin' => $admin->usuario], 200);
+            $expiresAt = now()->addHours(6);
+            $token = $admin->createToken('access_token', ['*'], $expiresAt)->plainTextToken;
+
+            return response()->json(['message' => 'Login Realizado', 'token' => $token, 'admin' => $admin->usuario], 200);
         }
         ;
         return response()->json(['message' => 'Credenciais inválidas ou esta conta está inativa'], 401);
         // return back()->withErrors(['usuario' => 'Usuário ou senha inválidos']);
     }
 
-    public function logout()
+    public function logout(Request $request)
     {
-        Session::forget('admin');
-        Session::forget('admin_usuario');
-        Session::flush();
+        try {
+            $request->user()->tokens->each(function($token){
+                $token->delete();
+            });
+            return response()->json(['message' => 'Você saiu da conta'], 200);
+        } catch (\Exception $e){
+            return response()->json(['message' => 'Erro ao fazer logout', 'error' => $e->getMessage()], 500);
+        }
 
-        return response()->json(['message' => 'Você saiu da conta'], 200);
-        // return redirect()->route('login')->with('success', 'Você saiu da conta');
     }
     // verificar autenticacao
-    public function checkAuth()
+    public function checkAuth(Request $request)
     {
-        if (Session::has('admin')) {
-            $admin = Admin::find(Session::get('admin'));
+        if($request->user()){
+            $admin = $request->user();
             return response()->json([
                 'authenticated' => true,
                 'admin' => [
                     'id' => $admin->id,
                     'usuario' => $admin->usuario
+                ],
+                'token_info' => [
+                    'can' => $request->user()->tokenCan('*'),
+                    'expires_at' => $request->user()->currentAccessToken()->expires_at ?? null
                 ]
             ], 200);
         }
         return response()->json([
-            'authenticated' => false,
-            'session' => Session::all()
+            'message' => 'Não autenticado',
+            'authenticated' => false
         ], 401);
+    }
+    public function refreshToken(Request $request)
+    {
+        if (!$request->user()) {
+            return response()->json([
+                'message' => 'Não autenticado'
+            ], 401);
+        }
+        
+        $admin = $request->user();
+        
+        $request->user()->currentAccessToken()->delete();
+        
+        $expiresAt = now()->addHours(6);
+        $newToken = $admin->createToken('access_token', ['*'], $expiresAt)->plainTextToken;
+        
+        return response()->json([
+            'message' => 'Token renovado com sucesso',
+            'token' => $newToken,
+            'token_expires_at' => $expiresAt->toDateTimeString()
+        ], 200);
     }
 }
