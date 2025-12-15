@@ -19,7 +19,7 @@ Route::middleware(['admin.auth'])->group(function(){
     // check de autenticacao
     Route::get('/auth/check', [AuthController::class, 'checkAuth']);
     // logout
-    Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
+    Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
     // refresh token
     Route::post('/refresh', [AuthController::class, 'refreshToken']);
     // exibe usuarios

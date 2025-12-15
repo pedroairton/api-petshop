@@ -15,6 +15,10 @@ class UserController extends Controller
             'users' => $users
         ]);
     }
+    public function view(){
+        $users = User::all();
+        return view('pages.index', compact($users));
+    }
     public function show(User $user){
         return view('pages.user', [
             'user' => $user

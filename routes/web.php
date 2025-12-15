@@ -29,3 +29,5 @@ Route::get('/dashboard', function(){
     return view('pages.dashboard');
     // retornar view do dashboard aqui
 })->name('dashboard');
+
+Route::get('/rota', [UserController::class, 'view'])->name('rota');
