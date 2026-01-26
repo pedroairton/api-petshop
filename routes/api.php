@@ -68,4 +68,10 @@ Route::middleware(['admin.auth'])->group(function(){
     Route::put('/pet/atualizar/{id}', [PetController::class, 'updatePet'])->name('atualiza-pet');
     // atualizar usuario
     Route::put('/usuarios/atualizar/{id}', [UsuarioController::class, 'updateUser'])->name('atualiza-user');
+    // deleta usuario
+    Route::delete('/usuarios/{id}/delete', [UsuarioController::class, 'deleteUser'])->name('delete-user');
+    // deleta pet
+    Route::delete('/pet/{id}/delete', [PetController::class, 'deletePet'])->name('delete-pet');
+    // deleta agendamento
+    Route::delete('/agendamento/{id}/delete', [AgendamentoController::class, 'deleteAgendamento'])->name('delete-agendamento');
 });

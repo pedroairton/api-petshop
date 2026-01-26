@@ -45,7 +45,7 @@ class PetController extends Controller
         $pet->update($request->all());
         return response()->json('Pet atualizado');
     }
-    public function delPet(Request $request, $id) {
+    public function deletePet($id) {
         $pet = Pet::find($id);
         $pet->delete();
         return response()->json('Pet deletado');

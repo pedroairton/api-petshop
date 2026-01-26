@@ -62,9 +62,9 @@ class UsuarioController extends Controller
         $usuario->update($request->all());
         return response()->json('Usuário atualizado',200);
     }
-    public function delUser(Request $request, $id) {
+    public function deleteUser($id) {
         $usuario = Usuario::find($id);
-        $usuario->update($request->all());
+        $usuario->delete();
         return response()->json('Usuário deletado', 204);
     }
 }

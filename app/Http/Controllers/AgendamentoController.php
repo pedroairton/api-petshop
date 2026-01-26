@@ -158,4 +158,13 @@ class AgendamentoController extends Controller
         $agendamento->update($request->all());
         return response()->json('Agendamento atualizado com sucesso', 200);
     }
+    public function deleteAgendamento($id)
+    {
+        $agendamento = Agendamento::find($id);
+        if (!$agendamento) {
+            return response()->json(['message' => 'Agendamento não encontrado'], 404);
+        }
+        $agendamento->delete();
+        return response()->json(['message' => 'Agendamento excluído com sucesso'], 200);
+    }
 }
